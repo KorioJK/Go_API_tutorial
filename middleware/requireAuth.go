@@ -14,8 +14,10 @@ import (
 
 func RequireAuth(c *gin.Context) {
 	tokenString, err := c.Cookie("Authorization")
-	if err != nil || tokenString == "" {
+	if err != nil {
+
 		c.AbortWithStatus(http.StatusUnauthorized)
+		return
 
 	}
 	// Parse takes the token string and a function for looking up the key. The latter is especially
@@ -33,13 +35,13 @@ func RequireAuth(c *gin.Context) {
 	})
 	if err != nil {
 		c.AbortWithStatus(http.StatusUnauthorized)
-
+		return
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			c.AbortWithStatus(http.StatusUnauthorized)
-
+			return
 		}
 		existuser, _ := c.Get("user")
 		if existuser == nil {
@@ -53,6 +55,6 @@ func RequireAuth(c *gin.Context) {
 		fmt.Println(claims["is"])
 	} else {
 		c.AbortWithStatus(http.StatusUnauthorized)
-
+		return
 	}
 }
