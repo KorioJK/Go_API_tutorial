@@ -1,0 +1,46 @@
+
+
+type User{
+	id:ID!
+	email:String!
+}
+
+type Post{
+	id:ID!
+	title:String!
+	body:String!
+}
+
+type Query{
+	posts: [Post]
+	post(id:ID!): Post
+	users:[User]
+	user(id:ID!): User
+}
+
+type Mutation{
+	createPost(input: PostInput): Post
+	updatePost(id: ID!, input: PostInput): Post
+	createUser(input: UserInput): User
+	updateUser(id: ID!, input: UserInput): User
+	deletePost(id: ID!):DeletePostResponse
+	deleteUser(id: ID!):DeleteUserResponse
+}
+
+input UserInput{
+	email: String!
+	password: String!
+}
+
+input PostInput{
+	title: String!
+	body: String!
+}
+
+type DeletePostResponse{
+	deletedPostId: Int!
+}
+
+type DeleteUserResponse{
+	deletedUserId: Int!
+}
